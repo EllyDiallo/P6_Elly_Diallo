@@ -6,10 +6,12 @@ const userRoutes = require('./routes/user');
 const path = require('path');
 const app = express();
 const helmet = require('helmet');
+require("dotenv").config();
 
 
 
-const URI = 'mongodb+srv://Elly:openclass@cluster0.q217j.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+//const URI = 'mongodb+srv://Elly:openclass@cluster0.q217j.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+const URI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_LINK}`;
 
  mongoose.connect(URI,
   { useNewUrlParser: true,
