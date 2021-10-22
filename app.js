@@ -1,16 +1,14 @@
 const express = require('express');
-//const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-/*const stuffRoutes = require('./routes/stuff');*/
-const userRoutes = require('./routes/user');
-const path = require('path');
 const app = express();
+const mongoose = require('mongoose');
+const path = require('path');
 const helmet = require('helmet');
 require("dotenv").config();
 
+const sauceRoutes = require('./routes/sauces')
+const userRoutes = require('./routes/user');
 
 
-//const URI = 'mongodb+srv://Elly:openclass@cluster0.q217j.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 const URI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_LINK}`;
 
  mongoose.connect(URI,
@@ -31,9 +29,10 @@ app.use((req, res, next) => {
 
 app.use(express.urlencoded({extended: true})); 
 app.use(express.json());
-//app.use(bodyParser.json());
+
 app.use('/images', express.static(path.join(__dirname, 'images')));
-//app.use('/api/stuff', stuffRoutes);
+
+app.use('/api/sauces', sauceRoutes)
 app.use('/api/auth', userRoutes);
 
 
