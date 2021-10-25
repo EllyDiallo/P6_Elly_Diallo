@@ -9,10 +9,6 @@ const sauceRoutes = require('./routes/sauces')
 const userRoutes = require('./routes/user');
 
 
-<<<<<<< HEAD
-=======
-//const URI = 'mongodb+srv://Elly:openclass@cluster0.q217j.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
->>>>>>> 6c6d5e8b76f052448e7b8bb0cf089f3d030f1604
 const URI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_LINK}`;
 
  mongoose.connect(URI,
