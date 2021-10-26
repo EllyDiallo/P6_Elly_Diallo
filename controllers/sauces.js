@@ -53,37 +53,47 @@ exports.deleteSauce = (req, res, next) => {
 }
 
 
+exports.likeOrdislike = (req, res, next) => {
+  Sauce.findOne({ _id: req.params.id })
+    .then(sauce => {
+      let messageToUsers;
+      const userId = req.body.userId
+      let indexUserLiked = sauce.usersLiked.indexOf(userId);
+      let indexUserlDisiked = sauce.usersDisliked.indexOf(userId);
+      
+      // Est-ce que l'user a déjà voté ?
+      if (indexUserLiked !== -1) { // L'user a déjà dit qu'il aimait la sauce
+        // On efface son ancien vote
+        sauce.likes--;
+        sauce.usersLiked.splice(indexUserLiked, 1);
+      }
+      if (indexUserlDisiked !== -1) { // L'user a déjà dit qu'il n'aimait pas la sauce
+        // On efface son ancien vote
+        sauce.dislikes--;
+        sauce.usersDisliked.splice(indexUserlDisiked, 1);
+      }
 
-  
-
-
-
-  
-   
-    /*switch (like) {
+      // On met en place son nouveau vote
+      switch (req.body.like) {
         case 1:
-          if(sauce.usersLiked.find((_userID) => _userID === userID)){
-            return {message:"déjà liké "};
-          }
-          return{ 
-            //sauce.usersLiked.push( userID) + sauce.likes++;
-            usersLiked: [...sauce.usersLiked, userID],
-            likes: sauce.usersLiked.length + 1
-          
-          }
-                 
-            
-          
+          sauce.likes++;
+          sauce.usersLiked.push(userId);
+          messageToUsers = "Sauce likée !";
+          break;
+        case 0:
+          messageToUsers = "Sauce ignorée !";
           break;
         case -1:
-
-          break;
-          case 0:
-          
-            break;
-      
-        default:
+          sauce.dislikes++;
+          sauce.usersDisliked.push(userId);
+          messageToUsers = "Sauce dislikée !";     
           break;
       }
-*/ 
+      Sauce.updateOne({ _id: req.params.id }, {...sauce._doc, _id: req.params.id} )
+      .then(() => res.status(200).json({ message: "messageToUsers"}))
+      .catch(error => res.status(500).json({ error }));
+    })
+};
   
+
+    
