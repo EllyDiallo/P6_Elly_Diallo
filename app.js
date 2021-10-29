@@ -40,13 +40,14 @@ app.use(express.urlencoded({
 }));
 app.use(express.json());
 
-//Gestion de la ressource "images" pour chaque requête route "/images".
+//limiteur de requêtes (globales: 100/15mins, creation compte: 5/h)
 app.use("/api", rateLimits.limiter);
+app.use('/api/auth/signup', rateLimits.createAccountLimiter);
+
+//Gestion de la ressource "images" pour chaque requête route "/images".
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/api/sauces', sauceRoutes);
-
-app.use('/api/auth/signup', rateLimits.createAccountLimiter);
 app.use('/api/auth', userRoutes);
 
 

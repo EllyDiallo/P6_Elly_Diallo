@@ -1,9 +1,9 @@
 const Sauce = require("../models/sauce")
 const fs = require("fs")
 
-
+// Enregistrement de la sauce bdd.
 exports.createSauce = (req, res, next) => {
-    const sauce = JSON.parse(req.body.sauce)
+    const sauce = JSON.parse(req.body.sauce) 
 
     new Sauce({
             ...sauce,
@@ -18,7 +18,7 @@ exports.createSauce = (req, res, next) => {
         }))
 }
 
-
+// Obtention de toutes les sauces.
 exports.getAllSauces = (req, res, next) => {
     Sauce.find()
         .then((sauces) => res.status(200).json(sauces))
@@ -27,7 +27,7 @@ exports.getAllSauces = (req, res, next) => {
         }))
 }
 
-
+// Obtention d'une sauce.
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({
             _id: req.params.id
@@ -38,7 +38,7 @@ exports.getOneSauce = (req, res, next) => {
         }))
 }
 
-
+// Modification de la sauce.
 exports.modifySauce = (req, res, next) => {
     const sauceObject = req.file ? {
         ...JSON.parse(req.body.sauce),
@@ -60,7 +60,7 @@ exports.modifySauce = (req, res, next) => {
         }))
 }
 
-
+//Suppression de la la sauce.
 exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({
             _id: req.params.id
@@ -85,8 +85,7 @@ exports.deleteSauce = (req, res, next) => {
         }))
 }
 
-
-
+// Gestion des likes et dislikes.
 exports.likeOrdislike = (req, res, next) => {
     Sauce.findOne({
             _id: req.params.id
@@ -94,10 +93,12 @@ exports.likeOrdislike = (req, res, next) => {
         .then(sauce => {
             let messageToUsers;
             const userId = req.body.userId
+
+            // Obtention index de l'user ID du tableau user liked/disliked
             let indexUserLiked = sauce.usersLiked.indexOf(userId);
             let indexUserDisliked = sauce.usersDisliked.indexOf(userId);
 
-
+            // si user ID déja présent, on efface le vote et supprime le user ID du tableau.
             if (indexUserLiked !== -1) {
 
                 sauce.likes--;
@@ -109,7 +110,7 @@ exports.likeOrdislike = (req, res, next) => {
                 sauce.usersDisliked.splice(indexUserDisliked, 1);
             }
 
-
+            // Gestion des trois états 
             switch (req.body.like) {
             case 1:
                 sauce.likes++;
@@ -126,7 +127,7 @@ exports.likeOrdislike = (req, res, next) => {
                 break;
             }
 
-
+            // Modifiaction de la sauce.
             Sauce.updateOne({
                     _id: req.params.id
                 }, {
