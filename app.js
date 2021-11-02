@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const sauceRoutes = require('./routes/sauces');
 const userRoutes = require('./routes/user');
 const rateLimits = require('../backend/middleware/req-limit');
+const noCache = require('nocache');
 
 //Création application avec méthode express
 const app = express(); 
@@ -39,6 +40,8 @@ app.use(express.urlencoded({
     extended: true
 }));
 app.use(express.json());
+
+app.use(noCache());
 
 //limiteur de requêtes (globales: 100/15mins, creation compte: 5/h)
 app.use("/api", rateLimits.limiter);

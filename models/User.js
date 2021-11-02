@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const validator = require('validator');
+const sanitize= require('mongoose-sanitizer-plugin');
 
 const userSchema = mongoose.Schema({
     email: {
@@ -20,5 +21,6 @@ const userSchema = mongoose.Schema({
 });
 
 userSchema.plugin(uniqueValidator);
+userSchema.plugin(sanitize);
 
 module.exports = mongoose.model('User', userSchema);
