@@ -14,4 +14,4 @@
 
 #### Fichier .env.example
 
-Ramplacez les information du model .env.example par vos informations de connexion. et renomez ce fichier .env.example par .env 
+Remplacez les informations du model .env.example par vos informations de connexion. et renomez ce fichier .env.example par .env 
